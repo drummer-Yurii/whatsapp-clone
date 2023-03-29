@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import ChatsView from '@/ChatsView.vue';
+import ChatsView from '@/views/ChatsView.vue';
 
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
