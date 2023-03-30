@@ -1,3 +1,3 @@
 <template>
-  <router-view />./components/MessageRowComponent.vue
+  <router-view />
 </template>
