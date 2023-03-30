@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import { db } from '@/firebase-init';
-import { getDoc, setDoc, doc } from 'firebase/firestore';
+import { getDoc, setDoc, doc, getDocs, collection } from 'firebase/firestore';
 
 axios.defaults.baseURL = 'http://localhost:4001/'
 
@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
         picture: '',
         firstName: '',
         lastName: '',
+        allUsers: []
     }),
     actions: {
         async getUserDetailsFromGoogle(data) {
@@ -31,6 +32,17 @@ export const useUserStore = defineStore('user', {
                 this.lastName = res.data.family_name
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        async getAllUsers() {
+            const querySnapshot = await getDocs(collection(db, "users"))
+            let results = []
+            querySnapshot.forEach(doc => { results.push(doc.data()) })
+
+            if (results.length) {
+                this.allUsers = []
+                results.forEach(res => { this.allUsers.push(res) })
             }
         },
 

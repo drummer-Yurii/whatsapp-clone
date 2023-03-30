@@ -59,7 +59,7 @@
 import ChatsView from '@/views/ChatsView.vue';
 import MessageView from '@/views/MessageView.vue';
 import FindFriendsView from '@/views/FindFriendsView.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
@@ -71,6 +71,14 @@ const userStore = useUserStore();
 
 let open = ref(true);
 let showFindFriends = ref(false);
+
+onMounted(() => {
+    try {
+        userStore.getAllUsers()
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 const logout = () => {
     let res = confirm('Are you sure you want to logout?')
