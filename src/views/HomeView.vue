@@ -14,6 +14,7 @@
                 <div class="px-1 m-2 bg-[#F0F0F0] flex items-center justify-center rounded-md">
                     <MagnifyIcon fillColor="#515151" :size="18" class="ml-2" />
                     <input
+                        @click="showFindFriends = !showFindFriends"
                         class="ml-5 appearance-none w-full bg-[#F0F0F0] py-1.5 px-2.5 text-gray-700 
                             leading-tight focus:outline-none focus:shadow-outline 
                             placeholder:text-sm placeholder:text-gray-500" 
@@ -32,7 +33,7 @@
             <FindFriendsView class="pt-28" />
         </div>
 
-        <div v-if="open">
+        <div v-if="userDataForChat.length">
             <MessageView />
         </div>
 
@@ -66,11 +67,10 @@ import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 import { useUserStore } from '@/store/user-store';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 const router = useRouter();
 const userStore = useUserStore();
-
-let open = ref(true);
-let showFindFriends = ref(false);
+const { showFindFriends, userDataForChat } = storeToRefs(userStore)
 
 onMounted(() => {
     try {

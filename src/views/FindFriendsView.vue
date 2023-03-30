@@ -1,7 +1,7 @@
 <template>
   <div id="FindFriends" class="pt-[100px] overflow-auto fixed h-[100vh] w-full">
     <div v-for="user in userStore.allUsers" :key="user">
-      <div v-if="hideMe(user)" class="flex w-full p-4 items-center cursor-pointer">
+      <div v-if="hideMe(user)" @click="createNewChat(user)" class="flex w-full p-4 items-center cursor-pointer">
         <img class="rounded-full mr-4 w-12" :src="user.picture || ''" alt="">
 
         <div class="w-full">
@@ -19,13 +19,26 @@
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia';
 import { useUserStore } from '../store/user-store';
 const userStore = useUserStore();
+const { sub, userDataForChat } = storeToRefs(userStore)
 
 const hideMe = (user) => {
-  if (user.sub === userStore.sub) {
+  if (user.sub === sub.value) {
     return false
   }
   return true
+};
+
+const createNewChat = (user) => {
+  userDataForChat.value = []
+  userDataForChat.value.push({
+    id: '',
+    sub1: sub.value,
+    sub2: user.sub,
+    firstName: user.firstName,
+    picture: user.picture,
+  })
 }
 </script>
