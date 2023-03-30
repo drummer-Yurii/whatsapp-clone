@@ -22,6 +22,8 @@
 </template>
 
 <script setup>
+import axios from 'axios';
+
 const callback = async (response) => {
     console.log(response);
 
@@ -29,6 +31,7 @@ const callback = async (response) => {
         let res = await axios.post('http://localhost:4001/api/google-login', {
             token: response.credential
         })
+        console.log(res.data);
     } catch (error) {
         console.log(error);   
     }
