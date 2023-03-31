@@ -16,7 +16,8 @@ export const useUserStore = defineStore('user', {
         chats: [],
         allUsers: [],
         userDataForChat: [],
-        showFindFriends: false
+        showFindFriends: false,
+        currentChat: null
     }),
     actions: {
         async getUserDetailsFromGoogle(data) {
@@ -67,6 +68,14 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        async getChatById(id) {
+            onSnapshot(doc(db, "chat", id), (doc) => {
+                let res = []
+                res.push(doc.data())
+                this.currentChat = res
+            })
         },
 
         async sendMessage(data) {
