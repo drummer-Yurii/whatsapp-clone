@@ -1,13 +1,27 @@
 <template>
     <div id="Messages" class="pt-1 z-0 overflow-auto fixed h-[calc(100vh-100px)] w-[420px]">
         <div v-for="chat in chats" :key="chat">
-            <MessageRowComponent :chat="chat" />
+            <div @click="openChat(chat)">
+                <MessageRowComponent :chat="chat" />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { useUserStore } from '../store/user-store';
 import MessageRowComponent from '@/components/MessageRowComponent.vue';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+const { chats, userDataForChat } = storeToRefs(userStore);
+
+onMounted(async () => {
+    if (userDataForChat.value.length) {
+        await userStore.getChatById(userDataForChat.value[0].id)
+    }
+});
 
 const openChat = async (chat) => {
     userDataForChat.value = []

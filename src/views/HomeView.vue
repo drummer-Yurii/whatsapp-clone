@@ -60,7 +60,7 @@
 import ChatsView from '@/views/ChatsView.vue';
 import MessageView from '@/views/MessageView.vue';
 import FindFriendsView from '@/views/FindFriendsView.vue';
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 
 import AccountGroupIcon from 'vue-material-design-icons/AccountGroup.vue';
 import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
@@ -72,9 +72,10 @@ const router = useRouter();
 const userStore = useUserStore();
 const { showFindFriends, userDataForChat } = storeToRefs(userStore)
 
-onMounted(() => {
+onMounted(async () => {
     try {
         userStore.getAllUsers()
+        await userStore.getAllChatsByUser()
     } catch (error) {
         console.log(error);
     }

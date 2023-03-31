@@ -21,22 +21,18 @@
                 id="MessagesSection"
                 class="pt-20 pb-8 z-[-1] h-[calc(100vh-65px)] w-[calc(100vw-420px)] overflow-auto fixed touch-auto"
             >
-                <div class="px-20 text-sm">
-                    <div class="flex w-[calc(100%-50px)]">
-                        <div class="inline-block bg-white p-2 rounded-md my-1">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                            Magni, distinctio blanditiis! Odit illum voluptatibus hic quod omnis quos est dicta porro 
-                            numquam dolores adipisci cum nisi dolor aperiam quis alias, 
-                            illo debitis ea in ipsa enim? Minus quasi dolores consectetur.
+                <div v-if="currentChat && currentChat.length" class="px-20 text-sm">
+                    <div v-for="msg in currentChat[0].messages" :key="msg">
+                        <div v-if="msg.sub === sub" class="flex w-[calc(100%-50px)]">
+                            <div class="inline-block bg-white p-2 rounded-md my-1">
+                               {{ msg.message }}
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="flex justify-end space-x-1 w-[calc(100%-50px)] float-right">
-                        <div class="inline-block bg-green-200 p-2 rounded-md my-1">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                            Magni, distinctio blanditiis! Odit illum voluptatibus hic quod omnis quos est dicta porro 
-                            numquam dolores adipisci cum nisi dolor aperiam quis alias, 
-                            illo debitis ea in ipsa enim? Minus quasi dolores consectetur.
+                        <div v-else class="flex justify-end space-x-1 w-[calc(100%-50px)] float-right">
+                            <div class="inline-block bg-green-200 p-2 rounded-md my-1">
+                                {{ msg.message }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,7 +71,7 @@ import SendIcon from 'vue-material-design-icons/Send.vue';
 import { useUserStore } from '../store/user-store';
 import { storeToRefs } from 'pinia';
 const userStore = useUserStore();
-const { userDataForChat } = storeToRefs(userStore);
+const { userDataForChat, currentChat, sub } = storeToRefs(userStore);
 
 let message = ref('');
 
