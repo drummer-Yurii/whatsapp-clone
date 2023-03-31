@@ -1,6 +1,6 @@
 <template>
   <div id="FindFriends" class="pt-[100px] overflow-auto fixed h-[100vh] w-full">
-    <div v-for="user in userStore.allUsers" :key="user">
+    <div v-for="user in usersComputed" :key="user">
       <div v-if="hideMe(user)" @click="createNewChat(user)" class="flex w-full p-4 items-center cursor-pointer">
         <img class="rounded-full mr-4 w-12" :src="user.picture || ''" alt="">
 
@@ -19,10 +19,12 @@
 </template>
 
 <script setup>
+import { computed, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '../store/user-store';
 const userStore = useUserStore();
-const { sub, userDataForChat } = storeToRefs(userStore)
+const { sub, userDataForChat, allUsers, removeUsersFromFindFriends } = storeToRefs(userStore)
+let users = ref([])
 
 const hideMe = (user) => {
   if (user.sub === sub.value) {
@@ -41,4 +43,13 @@ const createNewChat = (user) => {
     picture: user.picture,
   })
 }
+
+const usersComputed = computed(() => {
+  allUsers.value.forEach(user => users.value.push(user))
+  removeUsersFromFindFriends.value.forEach(remove => {
+    let index = users.value.findIndex(user => user.sub === remove)
+    users.value.splice(index, 1)
+  })
+  return users.value
+})
 </script>
