@@ -159,7 +159,7 @@ export const useUserStore = defineStore('user', {
                 console.log(error);
             }
         },
-        
+
         logout() {
             this.sub = ''
             this.email = ''

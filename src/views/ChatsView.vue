@@ -15,7 +15,7 @@ import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
 
 const userStore = useUserStore();
-const { chats, userDataForChat } = storeToRefs(userStore);
+const { chats, userDataForChat, sub } = storeToRefs(userStore);
 
 onMounted(async () => {
     if (userDataForChat.value.length) {
