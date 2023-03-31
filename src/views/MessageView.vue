@@ -8,9 +8,16 @@
                     flex justify-between items-center px-2 py-2"
                 >
                     <div class="flex items-center">
-                        <img class="rounded-full mx-1 w-10" src="https://random.imagecdn.app/100/100" alt="">
-                        <div class="text-gray-900 ml-1 fpnt-semibold">
-                            Frank
+                        <img 
+                            v-if="userDataForChat[0] && userDataForChat[0].picture"
+                            class="rounded-full mx-1 w-10" 
+                            :src="userDataForChat[0].picture" 
+                        >
+                        <div 
+                            v-if="userDataForChat[0] && userDataForChat[0].firstName"
+                            class="text-gray-900 ml-1 fpnt-semibold"
+                        >
+                            {{ userDataForChat[0].firstName }}
                         </div>
                     </div>
                     <DotsVerticalIcon fillColor="#515151" />
@@ -99,15 +106,17 @@ const sendMessage = async () => {
     })
     message.value = ''
 
+    const userData = userDataForChat.value[0]
+
      let data = {
-        id: chat.id,
+        id: userData.id,
         key1: 'sub1HasViewed', val1: false,
         key2: 'sub2HasViewed', val2: false,
     }
-    if (chat.sub1 === sub.value) {
+    if (userData.sub1 === sub.value) {
         data.val1 = true
         data.val2 = false
-    } else if (chat.sub2 === sub.value) {
+    } else if (userData.sub2 === sub.value) {
         data.val1 = false
         data.val2 = true
     }
