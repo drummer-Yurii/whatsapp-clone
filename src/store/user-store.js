@@ -91,7 +91,7 @@ export const useUserStore = defineStore('user', {
                         sub2: doc.data().sub2,
                         sub1HasViewed: doc.data().sub1HasViewed,
                         sub2HasViewed: doc.data().sub2HasViewed,
-                        messages: doc.data.messages
+                        messages: doc.data().messages
                     }
 
                     if (doc.data().sub1 === this.sub) chatArray.push(data)
@@ -158,6 +158,13 @@ export const useUserStore = defineStore('user', {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        async hasReadMessage(data) {
+            await updateDoc(doc(db, `chat/${data.id}`), {
+                [data.key1]: data.val1,
+                [data.key2]: data.val2,
+            }, { merge:true })
         },
 
         logout() {

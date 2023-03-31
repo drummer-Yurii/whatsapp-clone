@@ -42,7 +42,6 @@
                 <div class="flex items-center justify-center">
                     <EmoticonExcitedOutlineIcon :size="27" fillColor="#515151" class="mx-1.5" />
                     <PaperclipIcon :size="27" fillColor="#515151" class="mx-1.5 mr-3" />
-                    {{ message }}
                     <input
                         v-model="message"
                         class="mr-1 shadow appearance-none rounded-lg w-full py-3 px-4 text-gray-700 
@@ -52,7 +51,11 @@
                         placeholder="Message"
                     >
 
-                    <button @click="sendMessage" class="ml-3 p-2 w-12 flex items-center justify-center">
+                    <button 
+                        :disabled="disableBtn"
+                        @click="sendMessage" 
+                        class="ml-3 p-2 w-12 flex items-center justify-center"
+                    >
                         <SendIcon fillColor="#515151" />
                     </button>
                 </div>
@@ -62,7 +65,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import DotsVerticalIcon from 'vue-material-design-icons/DotsVertical.vue';
 import EmoticonExcitedOutlineIcon from 'vue-material-design-icons/EmoticonExcitedOutline.vue';
 import PaperclipIcon from 'vue-material-design-icons/Paperclip.vue';
@@ -74,13 +77,46 @@ const userStore = useUserStore();
 const { userDataForChat, currentChat, sub } = storeToRefs(userStore);
 
 let message = ref('');
+let disableBtn = ref(false);
+
+watch(() => currentChat.value, (chat) => {
+    if (chat.length) {
+        setTimeout(() => {
+            let objDiv = document.getElementById('MessagesSection')
+            objDiv.scrollTop = objDiv.scrollHeight
+        }, 50)
+    }
+}, { deep:true })
 
 const sendMessage = async () => {
+    if (message.value === '') return
+    disableBtn.value = true
+
     await userStore.sendMessage({
         message: message.value,
         sub2: userDataForChat.value[0].sub2,
         chatId: userDataForChat.value[0].id,
     })
+    message.value = ''
+
+     let data = {
+        id: chat.id,
+        key1: 'sub1HasViewed', val1: false,
+        key2: 'sub2HasViewed', val2: false,
+    }
+    if (chat.sub1 === sub.value) {
+        data.val1 = true
+        data.val2 = false
+    } else if (chat.sub2 === sub.value) {
+        data.val1 = false
+        data.val2 = true
+    }
+    await userStore.hasReadMessage(data)
+
+    let objDiv = document.getElementById('MessagesSection')
+    objDiv.scrollTop = objDiv.scrollHeight
+
+    disableBtn.value = false
 }
 </script>
 
